@@ -26,6 +26,7 @@ mean_quality = sum(qualities) / len(qualities)
 dev_list = []
 squared_list = []
 
+# Standard Deviation is the Square Root of the Variance
 def find_variance(data, name):
     for k, i in enumerate(data):
         dev = i - mean_quality
