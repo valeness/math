@@ -26,11 +26,10 @@ def find_correlation(data):
             calc = eval(i)
             commands[i].append(calc)
 
-    equation = 'round(sum({0}) / (math.sqrt(sum({1})) * math.sqrt(sum({2}))), 2)'.format(
-        commands['x*y'],
-        commands['math.pow(x, 2)'],
-        commands['math.pow(y, 2)']
-    )
+    equation = 'round(sum(x*y) / (math.sqrt(sum(math.pow(x, 2)) * sum(math.pow(y, 2)))), 2)'
+    for i in commands:
+        points = '[{0}]'.format(','.join(str(e) for e in commands[i]))
+        equation = equation.replace(i, points)
     r = eval(equation)
     return r
 
