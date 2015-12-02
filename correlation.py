@@ -1,5 +1,6 @@
 import csv
 import math
+import time
 
 data = []
 prices = []
@@ -15,27 +16,26 @@ with open('datasets/simple.csv', 'r') as f:
 # prices    = x
 # qualities = y
 # Formula for Pearson's r
-# r = sigma(xy) / sqrt(sigma(x^2) * sigma(y^2))
+# r = sigma(xy) / (sqrt(sigma(x^2) * sigma(y^2)))
 
 def find_correlation(data):
-    tmp_sigma_xy = []
-    tmp_sigma_x = []
-    tmp_sigma_y = []
-    for i in data:
-        sum_xy = i[0] * i[1]
-        x_squared = math.pow(i[0], 2)
-        y_squared = math.pow(i[1], 2)
+    now = time.time() * 1000
+    commands = {'x*y' : [], 'math.pow(x, 2)' : [], 'math.pow(y, 2)' : []}
+    for (x, y) in data:
+        for i in commands:
+            calc = eval(i)
+            commands[i].append(calc)
 
-        tmp_sigma_xy.append(sum_xy)
-        tmp_sigma_x.append(x_squared)
-        tmp_sigma_y.append(y_squared)
-    sigma_xy = sum(tmp_sigma_xy)
-    sigma_x = sum(tmp_sigma_x)
-    sigma_y = sum(tmp_sigma_y)
-    r = round(sigma_xy / math.sqrt(sigma_x * sigma_y), 2)
+    equation = 'round(sum({0}) / (math.sqrt(sum({1})) * math.sqrt(sum({2}))), 2)'.format(
+        commands['x*y'],
+        commands['math.pow(x, 2)'],
+        commands['math.pow(y, 2)']
+    )
+    r = eval(equation)
     return r
-r = find_correlation(data)
-print(r)
 
+if __name__ == '__main__':
+    r = find_correlation(data)
+    print(r)
 # Expected Output
 # 0.76
